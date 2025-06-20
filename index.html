@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VIP Code Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle, #111, #000);
+      color: #00ffcc;
+      text-align: center;
+      padding-top: 80px;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+    .digits {
+      font-size: 4em;
+      letter-spacing: 10px;
+      display: flex;
+      justify-content: center;
+    }
+    .digit {
+      width: 1em;
+      display: inline-block;
+    }
+    button {
+      margin-top: 40px;
+      padding: 14px 28px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      background: #00ffcc;
+      color: #000;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>VIP Code Generator</h1>
+  <div class="digits" id="codeContainer">
+    <span class="digit">0</span>
+    <span class="digit">0</span>
+    <span class="digit">0</span>
+    <span class="digit">0</span>
+    <span class="digit">0</span>
+    <span class="digit">0</span>
+  </div>
+  <button onclick="generateCode()" id="btn">Generate Code</button>
+
+  <!-- Sound: Spin only -->
+  <audio id="spinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spinning-1932.mp3" preload="auto"></audio>
+
+  <script>
+    function generateCode() {
+      const digits = document.querySelectorAll('.digit');
+      const spinSound = document.getElementById('spinSound');
+      document.getElementById('btn').disabled = true;
+
+      let spinning = [];
+
+      spinSound.currentTime = 0;
+      spinSound.play();
+
+      digits.forEach((digit, i) => {
+        let count = 0;
+        spinning[i] = setInterval(() => {
+          digit.textContent = count % 10;
+          count++;
+        }, 70);
+      });
+
+      setTimeout(() => {
+        spinning.forEach((interval, i) => {
+          clearInterval(interval);
+          digits[i].textContent = Math.floor(Math.random() * 10);
+        });
+        spinSound.pause();
+        spinSound.currentTime = 0;
+        document.getElementById('btn').disabled = false;
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
